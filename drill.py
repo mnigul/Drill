@@ -1,21 +1,43 @@
-file = open("drill.ngc", 'r')
-path = ""
-for line in file:
-    if line == "":
-        continue # skip random files
-    elif "G81" in line:
-        path = [] #empty path for coords
-        split_line = line.split(" ") # split line, add result in a list
-        R_coordinate = split_line[1]
-        F_coordinate = split_line[2]
-        X_coordinate_init = split_line[3]
-        Y_coordinate_init = split_line[4]
-        path.append((X_coordinate_init, Y_coordinate_init))
+failiNimi = "drill.ngc"
+uusFail = "drillUus.ngc"
 
-    elif len(path) != 0: 
-        split_line = line.split(" ")
-        X_coordinate = split_line[0]
-        Y_coordinate = split_line[0]
-        
-distances[0] = int(path[0][0])**2 + int(path[0][1])**2
+#korjab ridadest  vastava tekstid
+def kogumine(tekst,line):
+    return tekst + line
 
+#faili lugemine ja kaheks jagamine: tekst ja punktide koordinaadid  
+def failistLugemine(failiNimi):
+    tekst = ""
+    punkt = ""
+    tekstid = []
+    punktid = []
+    f = open(failiNimi, 'r')
+    for line in f.readlines():
+        rida = line.split(" ")
+        if rida[0] == "G81":
+            rida = line.split("X")
+            tekst = (kogumine(tekst,rida[0]))
+            tekstid.append(tekst)
+            tekst = ""
+            punkt = 'X' + rida[1]
+        elif rida[0][0] == 'X':
+            punkt = kogumine(punkt,line)
+        else:
+            if len(punkt)>0:
+                punktid.append(punkt)
+                punkt = ""
+            tekst = kogumine(tekst, line) 
+    tekstid.append(tekst)
+    f.close
+    return tekstid, punktid
+
+#kustutab tulemuse faili tyhjaks ja kirjutab uue tulemuse faili 
+def failiKirjutamine(tekstid, failiNimi):
+    f = open(failiNimi, 'w')
+    for i in range (0, len(punktid)):
+        f.write(tekstid[i]+punktid[i])
+    f.write(tekstid[-1])
+    f.close
+          
+[tekstid, punktid] = failistLugemine(failiNimi)
+uusFail = failiKirjutamine(tekstid, uusFail)
