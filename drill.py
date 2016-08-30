@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 failiNimi = "drill.ngc"
 uusFail = "drillUus.ngc"
 
@@ -80,7 +82,7 @@ def liidabPunktid(xyUus):
     return punktUus
 
 #kustutab tulemuse faili tyhjaks ja kirjutab uue tulemuse faili 
-def failiKirjutamine(tekstid, failiNimi):
+def failiKirjutamine(tekstid, punktid, failiNimi):
     f = open(failiNimi, 'w')
     for i in range (0, len(punktid)):
         f.write(tekstid[i]+punktid[i])
@@ -89,4 +91,5 @@ def failiKirjutamine(tekstid, failiNimi):
           
 [tekstid, punktid] = failistLugemine(failiNimi)
 uusPunktid = punktideKorrigeerimine(punktid)
-uusFail = failiKirjutamine(tekstid, uusFail)
+failiKirjutamine(tekstid, uusPunktid, uusFail)
+
